@@ -43,7 +43,7 @@ class IRCCloud(object):
                 ))
                 sys.exit()
             # New form-auth API needs token to prevent CSRF attacks
-            token = requests.post(self.uri_formauth).json()['token']
+            token = requests.post(self.uri_formauth, headers={'content-length': 0}).json()['token']
             data = {'email': sys.argv[1], 'password': sys.argv[2], 'token': token}
             headers = {'x-auth-formtoken': token}
             resp = requests.post(self.uri, data=data, headers=headers)
