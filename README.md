@@ -13,7 +13,7 @@ Installation:
 Usage:
 ------
 
-The easy way:
+### The easy way:
 
     $ ./irccloud.py
     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -28,15 +28,15 @@ The easy way:
     [ircc-uptime] Ready to go!
     [irccloud] Connection created.
 
-The hard way:
+### The hard way:
 
-  * Create/modify irccloud.ini to look like this:
+Create/modify irccloud.ini to look like this:
 
     [auth]
     email=myemail@emailprovider.com
     password=yourpasswordhere
 
-  * Then run:
+Then run:
 
     $ ./irccloud.py
     +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
