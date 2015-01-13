@@ -168,6 +168,7 @@ if __name__ == "__main__":
             except KeyboardInterrupt:
                 sys.exit()
             except:
+                print(traceback.format_exc())
                 print('Disconnected. Reconnecting in %s seconds.\n' % delay)
                 time.sleep(delay)
                 continue
