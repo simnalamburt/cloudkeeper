@@ -5,12 +5,31 @@ import json
 import requests
 import sys
 import time
-import thread
- 
+import traceback
+from getpass import getpass
+
+try:
+    # Python 2.x
+    from ConfigParser import SafeConfigParser 
+except:
+    # Python 3.x
+    from configparser import SafeConfigParser
+
+try:
+    # Python 2.x
+    import thread
+except:
+    # Python 3.x
+    import _thread as thread
  
 delay = 30
- 
- 
+
+# Support input() on both Python 2.x/3.x
+try:
+    input = raw_input
+except NameError:
+    pass
+
 class IRCCloud(object):
     def __init__(self):
         self.session = ''
