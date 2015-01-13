@@ -39,6 +39,7 @@ class IRCCloud(object):
         self.wss = 'wss://www.irccloud.com/?since_id=0'
         self.last = 0
         self.timeout = 120
+        self.config = SafeConfigParser()
  
     def connect(self):
         for line in self.create(self.session):
@@ -47,23 +48,61 @@ class IRCCloud(object):
                 thread.start_new_thread(self.check, ())
             self.last = self.current_time()
             self.parseline(line)
- 
+   
+    def reload_config(self):
+        self.config = SafeConfigParser()
+        self.config.read('irccloud.ini')
+    
     def auth(self):
         try:
-            if len(sys.argv) != 3:
-                fn = sys.argv[0]
-                if '/' in fn:
-                    fn = fn.split('/')[-1]
-                if '\\' in fn:
-                    fn = fn.split('\\')[-1]
-                print((
-                    '[ERROR] Usage:\n  $ python '
-                    '%s <email> <password>' % sys.argv[0]
-                ))
-                sys.exit()
+            # Load (or reload) configuration file
+            self.reload_config()
+            
+            # Check if we have any valid configuration. If we do, load it!
+            good_config = True
+            if self.config.has_section("auth"):
+                if self.config.has_option("auth", "email") and self.config.has_option("auth", "password"):
+                    user_email    = self.config.get("auth", "email")
+                    user_password = self.config.get("auth", "password")
+                else:
+                    good_config = False
+            else:
+                good_config = False
+            
+            # No valid configuration? No problem!
+            if good_config:
+                print("[ircc-uptime] Valid configuration loaded.")
+            else:
+                print("[ircc-uptime] No configuration (irccloud.ini) detected (or configuration corrupted)!")
+                user_email    = input("Enter your IRCCloud email: ")
+                user_password = getpass("Enter your IRCCloud password: ")
+                
+                # Commit to configuration
+                if not self.config.has_section("auth"):
+                    self.config.add_section("auth")
+                self.config.set("auth", "email", user_email)
+                self.config.set("auth", "password", user_password)
+                
+                # Attempt to save configuration
+                print("[ircc-uptime] Attempting to save configuration...")
+                try:
+                    self.configfh = open("irccloud.ini", "w")
+                    self.config.write(self.configfh)
+                    self.configfh.close()
+                    print("[ircc-uptime] Successfully wrote configuration!")
+                    self.reload_config()
+                except:
+                    print(traceback.format_exc())
+                    print("[ircc-uptime] Unable to save configuration.")
+                    try:
+                        self.configfh.close()
+                    except:
+                        pass
+            
             # New form-auth API needs token to prevent CSRF attacks
+            print("[ircc-uptime] Authenticating...")
             token = requests.post(self.uri_formauth, headers={'content-length': 0}).json()['token']
-            data = {'email': sys.argv[1], 'password': sys.argv[2], 'token': token}
+            data = {'email': user_email, 'password': user_password, 'token': token}
             headers = {'x-auth-formtoken': token}
             resp = requests.post(self.uri, data=data, headers=headers)
             data = json.loads(resp.text)
