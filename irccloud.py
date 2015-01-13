@@ -110,14 +110,15 @@ class IRCCloud(object):
                 print('[ERROR] Wrong email/password combination. Exiting.')
                 sys.exit()
             self.session = data['session']
+            print("[ircc-uptime] Ready to go!")
         except requests.exceptions.ConnectionError:
-            print('[ERROR] Failed to connect...')
+            print('[error] Failed to connect...')
             raise Exception('Failed to connect')
  
     def create(self, session):
         h = ["Cookie: session=%s" % session]
         self.ws = create_connection(self.wss, header=h, origin=self.origin)
-        print('[IRCCLOUD] Connection created.')
+        print('[irccloud] Connection created.')
         while 1:
             msg = self.ws.recv()
             if msg:
@@ -147,7 +148,7 @@ class IRCCloud(object):
             time.sleep(5)
             diff = self.diff(self.current_time())
             if diff > self.timeout and self.last != 0:
-                print('[ERROR] Connection timed out...')
+                print('[error] Connection timed out...')
                 if hasattr(self, 'ws'):
                     self.ws.close()
                 return
@@ -156,7 +157,7 @@ if __name__ == "__main__":
     print((
         '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
         '+ IRCCloud uptime script -- Copyright (c) Liam Stanley 2014 +\n'
-        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
+        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
     ))
     try:
         while True:
