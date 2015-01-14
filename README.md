@@ -28,6 +28,12 @@ Usage:
     [ircc-uptime] Ready to go!
     [irccloud] Connection created.
 
+You will only need to enter your credentials ONCE. Once entered, they
+will be saved and used forever.
+
+If you mistyped your credentials, you can either remove the newly
+created irccloud.ini, or modify it as indicated in the next section.
+
 ### The hard way:
 
 Create/modify irccloud.ini to look like this:
