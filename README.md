@@ -6,7 +6,7 @@ Installation:
 -------------
 
     $ sudo apt-get install python-pip
-    $ pip install websocket-client requests
+    $ sudo pip install websocket-client requests
     $ wget https://raw.githubusercontent.com/Liamraystanley/irccloud-uptime/master/irccloud.py
     $ chmod +x irccloud.py
 
@@ -18,4 +18,4 @@ Usage:
 Example:
 --------
 
-    $ ./irccloud.py me@liamstanley.io harpderptrololo
+    $ ./irccloud.py your@email.swag.com harpderptrololo
