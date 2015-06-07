@@ -6,21 +6,22 @@ import requests
 import sys
 import time
 import thread
- 
- 
+import random
+import string
+
 delay = 30
- 
- 
+
+
 class IRCCloud(object):
     def __init__(self):
         self.session = ''
         self.uri = 'https://www.irccloud.com/chat/login'
         self.uri_formauth = 'https://www.irccloud.com/chat/auth-formtoken'
         self.origin = 'https://www.irccloud.com'
-        self.wss = 'wss://www.irccloud.com/?since_id=0'
+        self.wss = 'wss://api.irccloud.com/websocket/' + str(random.choice(string.digits))
         self.last = 0
         self.timeout = 120
- 
+
     def connect(self):
         for line in self.create(self.session):
             if self.last == 0:
@@ -28,7 +29,7 @@ class IRCCloud(object):
                 thread.start_new_thread(self.check, ())
             self.last = self.current_time()
             self.parseline(line)
- 
+
     def auth(self):
         try:
             if len(sys.argv) != 3:
@@ -48,14 +49,14 @@ class IRCCloud(object):
             headers = {'x-auth-formtoken': token}
             resp = requests.post(self.uri, data=data, headers=headers)
             data = json.loads(resp.text)
-            if not 'session' in data:
+            if 'session' not in data:
                 print('[ERROR] Wrong email/password combination. Exiting.')
                 sys.exit()
             self.session = data['session']
         except requests.exceptions.ConnectionError:
             print('[ERROR] Failed to connect...')
             raise Exception('Failed to connect')
- 
+
     def create(self, session):
         h = ["Cookie: session=%s" % session]
         self.ws = create_connection(self.wss, header=h, origin=self.origin)
@@ -64,26 +65,23 @@ class IRCCloud(object):
             msg = self.ws.recv()
             if msg:
                 yield json.loads(msg)
- 
+
     def parseline(self, line):
         def oob_include(l):
-            h = {
-                "Cookie": "session=%s" % self.session,
-                "Accept-Encoding": "gzip"
-            }
+            h = {"Cookie": "session=%s" % self.session, "Accept-Encoding": "gzip"}
             requests.get(self.origin + l["url"], headers=h).json()
- 
+
         try:
             locals()[line["type"]](line)
         except KeyError:
             pass
- 
+
     def diff(self, time):
         return int(int(time) - int(self.last))
- 
+
     def current_time(self):
         return int(time.time())
- 
+
     def check(self):
         while True:
             time.sleep(5)
@@ -93,12 +91,13 @@ class IRCCloud(object):
                 if hasattr(self, 'ws'):
                     self.ws.close()
                 return
- 
+
 if __name__ == "__main__":
     print((
-        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
-        '+ IRCCloud uptime script -- Copyright (c) Liam Stanley 2014 +\n'
-        '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
+        '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
+        '+ IRCCloud uptime script -- Copyright (c) Liam Stanley 2014-2015 +\n'
+        '+  More info: https://github.com/Liamraystanley/irccloud-uptime  +\n'
+        '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
     ))
     try:
         while True:
