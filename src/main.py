@@ -6,7 +6,7 @@
 # option. This file may not be copied, modified, or distributed
 # except according to those terms.
 
-from __future__ import unicode_literals
+from __future__ import print_function, unicode_literals
 import json
 import sys
 import time
@@ -70,9 +70,9 @@ class IRCCloud(object):
 
             # No valid configuration? No problem!
             if good_config:
-                print('[ircc-uptime] Valid configuration loaded.')
+                print('Loaded configuration')
             else:
-                print('[ircc-uptime] No configuration (secret.ini) detected (or configuration corrupted)!')
+                print('No configuration (secret.ini) detected (or configuration corrupted)!')
                 user_email    = input('Enter your IRCCloud email: ')
                 user_password = getpass('Enter your IRCCloud password: ')
 
@@ -83,42 +83,42 @@ class IRCCloud(object):
                 self.config.set('auth', 'password', user_password)
 
                 # Attempt to save configuration
-                print('[ircc-uptime] Attempting to save configuration...')
+                print('Saving configuration ... ', end='', flush=True)
                 try:
                     self.configfh = open('secret.ini', 'w')
                     self.config.write(self.configfh)
                     self.configfh.close()
-                    print('[ircc-uptime] Successfully wrote configuration!')
+                    print('Done')
                     self.reload_config()
                 except:
                     print(traceback.format_exc())
-                    print('[ircc-uptime] Unable to save configuration.')
+                    print('Failed!')
                     try:
                         self.configfh.close()
                     except:
                         pass
 
             # New form-auth API needs token to prevent CSRF attacks
-            print('[ircc-uptime] Authenticating...')
+            print('Authenticating ... ', end='', flush=True)
             token = requests.post(self.uri_formauth, headers={'content-length': '0'}).json()['token']
             data = {'email': user_email, 'password': user_password, 'token': token}
             headers = {'x-auth-formtoken': token}
             resp = requests.post(self.uri, data=data, headers=headers)
             data = json.loads(resp.text)
             if 'session' not in data:
-                print('[ERROR] Wrong email/password combination. Exiting.')
+                print('[error] Wrong email/password combination. Exiting.')
                 sys.exit()
             self.session = data['session']
-            print('[ircc-uptime] Ready to go!')
+            print('Done')
         except requests.exceptions.ConnectionError:
-            print('[error] Failed to connect...')
+            print('Failed!')
             raise Exception('Failed to connect')
 
     def create(self, session):
         h = ['Cookie: session=%s' % session]
         self.ws = create_connection(self.wss, header=h, origin=self.origin)
-        print('[irccloud] Connection created.')
-        while 1:
+        print('Connection created.')
+        while True:
             msg = self.ws.recv()
             if msg:
                 yield json.loads(msg)
@@ -151,12 +151,6 @@ class IRCCloud(object):
 
 
 if __name__ == '__main__':
-    print('''\
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ IRCCloud uptime script -- Copyright (c) Liam Stanley 2014-2015 +
-+  More info: https://github.com/Liamraystanley/irccloud-uptime  +
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-''')
     try:
         while True:
             try:
