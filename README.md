@@ -7,4 +7,4 @@ pipenv install --three
 pipenv run python -u src/main.py
 ```
 
-Type the ID and password. It'll be stored at `irccloud.ini`.
+Type the ID and password. It'll be stored at `secret.ini`.

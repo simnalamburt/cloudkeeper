@@ -42,7 +42,7 @@ class IRCCloud(object):
 
     def reload_config(self):
         self.config = SafeConfigParser()
-        self.config.read('irccloud.ini')
+        self.config.read('secret.ini')
 
     def auth(self):
         try:
@@ -64,7 +64,7 @@ class IRCCloud(object):
             if good_config:
                 print('[ircc-uptime] Valid configuration loaded.')
             else:
-                print('[ircc-uptime] No configuration (irccloud.ini) detected (or configuration corrupted)!')
+                print('[ircc-uptime] No configuration (secret.ini) detected (or configuration corrupted)!')
                 user_email    = input('Enter your IRCCloud email: ')
                 user_password = getpass('Enter your IRCCloud password: ')
 
@@ -77,7 +77,7 @@ class IRCCloud(object):
                 # Attempt to save configuration
                 print('[ircc-uptime] Attempting to save configuration...')
                 try:
-                    self.configfh = open('irccloud.ini', 'w')
+                    self.configfh = open('secret.ini', 'w')
                     self.config.write(self.configfh)
                     self.configfh.close()
                     print('[ircc-uptime] Successfully wrote configuration!')
