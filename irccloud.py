@@ -1,5 +1,3 @@
-#!/usr/bin/python -u
-
 from websocket import create_connection
 import json
 import requests
