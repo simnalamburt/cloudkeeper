@@ -12,7 +12,7 @@ import string
 
 try:
     # Python 2.x
-    from ConfigParser import SafeConfigParser 
+    from ConfigParser import SafeConfigParser
 except:
     # Python 3.x
     from configparser import SafeConfigParser
@@ -23,7 +23,7 @@ try:
 except:
     # Python 3.x
     import _thread as thread
- 
+
 delay = 30
 
 # Support input() on both Python 2.x/3.x
@@ -42,7 +42,7 @@ class IRCCloud(object):
         self.last = 0
         self.timeout = 120
         self.config = SafeConfigParser()
- 
+
     def connect(self):
         for line in self.create(self.session):
             if self.last == 0:
@@ -50,16 +50,16 @@ class IRCCloud(object):
                 thread.start_new_thread(self.check, ())
             self.last = self.current_time()
             self.parseline(line)
-   
+
     def reload_config(self):
         self.config = SafeConfigParser()
         self.config.read('irccloud.ini')
-    
+
     def auth(self):
         try:
             # Load (or reload) configuration file
             self.reload_config()
-            
+
             # Check if we have any valid configuration. If we do, load it!
             good_config = True
             if self.config.has_section("auth"):
@@ -70,7 +70,7 @@ class IRCCloud(object):
                     good_config = False
             else:
                 good_config = False
-            
+
             # No valid configuration? No problem!
             if good_config:
                 print("[ircc-uptime] Valid configuration loaded.")
@@ -78,13 +78,13 @@ class IRCCloud(object):
                 print("[ircc-uptime] No configuration (irccloud.ini) detected (or configuration corrupted)!")
                 user_email    = input("Enter your IRCCloud email: ")
                 user_password = getpass("Enter your IRCCloud password: ")
-                
+
                 # Commit to configuration
                 if not self.config.has_section("auth"):
                     self.config.add_section("auth")
                 self.config.set("auth", "email", user_email)
                 self.config.set("auth", "password", user_password)
-                
+
                 # Attempt to save configuration
                 print("[ircc-uptime] Attempting to save configuration...")
                 try:
@@ -100,7 +100,7 @@ class IRCCloud(object):
                         self.configfh.close()
                     except:
                         pass
-            
+
             # New form-auth API needs token to prevent CSRF attacks
             print("[ircc-uptime] Authenticating...")
             token = requests.post(self.uri_formauth, headers={'content-length': 0}).json()['token']
