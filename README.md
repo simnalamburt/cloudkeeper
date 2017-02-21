@@ -1,4 +1,4 @@
-irccloud-uptime
+irccloud-connector
 ===============
 Keep your IRCCloud connection!
 
