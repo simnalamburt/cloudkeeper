@@ -1,34 +1,25 @@
-from websocket import create_connection
+from __future__ import unicode_literals
 import json
-import requests
 import sys
 import time
 import traceback
-from getpass import getpass
 import random
 import string
-
-try:
-    # Python 2.x
-    from ConfigParser import SafeConfigParser
-except:
-    # Python 3.x
+from getpass import getpass
+if sys.version_info >= (3,):
     from configparser import SafeConfigParser
-
-try:
-    # Python 2.x
-    import thread
-except:
-    # Python 3.x
     import _thread as thread
-
-delay = 30
-
-# Support input() on both Python 2.x/3.x
-try:
+else:
+    from ConfigParser import SafeConfigParser
+    import thread
     input = raw_input
-except NameError:
-    pass
+
+import requests
+from websocket import create_connection
+
+
+DELAY = 30
+
 
 class IRCCloud(object):
     def __init__(self):
@@ -36,7 +27,7 @@ class IRCCloud(object):
         self.uri = 'https://www.irccloud.com/chat/login'
         self.uri_formauth = 'https://www.irccloud.com/chat/auth-formtoken'
         self.origin = 'https://www.irccloud.com'
-        self.wss = 'wss://api.irccloud.com/websocket/' + str(random.choice(string.digits))
+        self.wss = 'wss://api.irccloud.com/websocket/' + random.choice(string.digits)
         self.last = 0
         self.timeout = 120
         self.config = SafeConfigParser()
@@ -60,10 +51,10 @@ class IRCCloud(object):
 
             # Check if we have any valid configuration. If we do, load it!
             good_config = True
-            if self.config.has_section("auth"):
-                if self.config.has_option("auth", "email") and self.config.has_option("auth", "password"):
-                    user_email    = self.config.get("auth", "email")
-                    user_password = self.config.get("auth", "password")
+            if self.config.has_section('auth'):
+                if self.config.has_option('auth', 'email') and self.config.has_option('auth', 'password'):
+                    user_email    = self.config.get('auth', 'email')
+                    user_password = self.config.get('auth', 'password')
                 else:
                     good_config = False
             else:
@@ -71,36 +62,36 @@ class IRCCloud(object):
 
             # No valid configuration? No problem!
             if good_config:
-                print("[ircc-uptime] Valid configuration loaded.")
+                print('[ircc-uptime] Valid configuration loaded.')
             else:
-                print("[ircc-uptime] No configuration (irccloud.ini) detected (or configuration corrupted)!")
-                user_email    = input("Enter your IRCCloud email: ")
-                user_password = getpass("Enter your IRCCloud password: ")
+                print('[ircc-uptime] No configuration (irccloud.ini) detected (or configuration corrupted)!')
+                user_email    = input('Enter your IRCCloud email: ')
+                user_password = getpass('Enter your IRCCloud password: ')
 
                 # Commit to configuration
-                if not self.config.has_section("auth"):
-                    self.config.add_section("auth")
-                self.config.set("auth", "email", user_email)
-                self.config.set("auth", "password", user_password)
+                if not self.config.has_section('auth'):
+                    self.config.add_section('auth')
+                self.config.set('auth', 'email', user_email)
+                self.config.set('auth', 'password', user_password)
 
                 # Attempt to save configuration
-                print("[ircc-uptime] Attempting to save configuration...")
+                print('[ircc-uptime] Attempting to save configuration...')
                 try:
-                    self.configfh = open("irccloud.ini", "w")
+                    self.configfh = open('irccloud.ini', 'w')
                     self.config.write(self.configfh)
                     self.configfh.close()
-                    print("[ircc-uptime] Successfully wrote configuration!")
+                    print('[ircc-uptime] Successfully wrote configuration!')
                     self.reload_config()
                 except:
                     print(traceback.format_exc())
-                    print("[ircc-uptime] Unable to save configuration.")
+                    print('[ircc-uptime] Unable to save configuration.')
                     try:
                         self.configfh.close()
                     except:
                         pass
 
             # New form-auth API needs token to prevent CSRF attacks
-            print("[ircc-uptime] Authenticating...")
+            print('[ircc-uptime] Authenticating...')
             token = requests.post(self.uri_formauth, headers={'content-length': '0'}).json()['token']
             data = {'email': user_email, 'password': user_password, 'token': token}
             headers = {'x-auth-formtoken': token}
@@ -110,13 +101,13 @@ class IRCCloud(object):
                 print('[ERROR] Wrong email/password combination. Exiting.')
                 sys.exit()
             self.session = data['session']
-            print("[ircc-uptime] Ready to go!")
+            print('[ircc-uptime] Ready to go!')
         except requests.exceptions.ConnectionError:
             print('[error] Failed to connect...')
             raise Exception('Failed to connect')
 
     def create(self, session):
-        h = ["Cookie: session=%s" % session]
+        h = ['Cookie: session=%s' % session]
         self.ws = create_connection(self.wss, header=h, origin=self.origin)
         print('[irccloud] Connection created.')
         while 1:
@@ -126,11 +117,11 @@ class IRCCloud(object):
 
     def parseline(self, line):
         def oob_include(l):
-            h = {"Cookie": "session=%s" % self.session, "Accept-Encoding": "gzip"}
-            requests.get(self.origin + l["url"], headers=h).json()
+            h = {'Cookie': 'session=%s' % self.session, 'Accept-Encoding': 'gzip'}
+            requests.get(self.origin + l['url'], headers=h).json()
 
         try:
-            locals()[line["type"]](line)
+            locals()[line['type']](line)
         except KeyError:
             pass
 
@@ -150,13 +141,14 @@ class IRCCloud(object):
                     self.ws.close()
                 return
 
-if __name__ == "__main__":
-    print((
-        '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
-        '+ IRCCloud uptime script -- Copyright (c) Liam Stanley 2014-2015 +\n'
-        '+  More info: https://github.com/Liamraystanley/irccloud-uptime  +\n'
-        '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n'
-    ))
+
+if __name__ == '__main__':
+    print('''\
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ IRCCloud uptime script -- Copyright (c) Liam Stanley 2014-2015 +
++  More info: https://github.com/Liamraystanley/irccloud-uptime  +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+''')
     try:
         while True:
             try:
@@ -167,8 +159,8 @@ if __name__ == "__main__":
                 sys.exit()
             except:
                 print(traceback.format_exc())
-                print('Disconnected. Reconnecting in %s seconds.\n' % delay)
-                time.sleep(delay)
+                print('Disconnected. Reconnecting in {} seconds.\n'.format(DELAY))
+                time.sleep(DELAY)
                 continue
     except KeyboardInterrupt:
         sys.exit()
