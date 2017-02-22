@@ -1,3 +1,5 @@
+# coding: utf-8
+
 # Copyright 2017 Hyeon Kim
 #
 # Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
@@ -83,7 +85,8 @@ class IRCCloud(object):
                 self.config.set('auth', 'password', user_password)
 
                 # Attempt to save configuration
-                print('Saving configuration ... ', end='', flush=True)
+                print('Saving configuration ... ', end='')
+                sys.stdout.flush()
                 try:
                     self.configfh = open('secret.ini', 'w')
                     self.config.write(self.configfh)
@@ -99,7 +102,8 @@ class IRCCloud(object):
                         pass
 
             # New form-auth API needs token to prevent CSRF attacks
-            print('Authenticating ... ', end='', flush=True)
+            print('Authenticating ... ', end='')
+            sys.stdout.flush()
             token = requests.post(self.uri_formauth, headers={'content-length': '0'}).json()['token']
             data = {'email': user_email, 'password': user_password, 'token': token}
             headers = {'x-auth-formtoken': token}
