@@ -9,33 +9,17 @@
 # option. This file may not be copied, modified, or distributed
 # except according to those terms.
 
-from __future__ import print_function, unicode_literals
 import sys
 from base64 import b64encode
-from getpass import getpass
 if sys.version_info >= (3,):
     import pickle
 else:
     import cPickle as pickle
-    input = raw_input
 
-def prompt():
-    print('Logging in to the IRCCloud server\n', file=sys.stderr)
-
-    # Get email address
-    print('     email : ', end='', file=sys.stderr)
-    sys.stderr.flush()
-    email = input()
-
-    # Get password
-    print('  password : ', end='', file=sys.stderr)
-    sys.stderr.flush()
-    password = getpass('')
-
-    return (email, password)
+from src.prompt import prompt
 
 if __name__ == '__main__':
     data = prompt()
-    # Serialize object
+    # Serialize the data
     serialized = b64encode(pickle.dumps(data, 2)).decode()
     print(serialized)
