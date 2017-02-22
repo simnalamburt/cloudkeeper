@@ -16,10 +16,10 @@ if sys.version_info >= (3,):
 else:
     import cPickle as pickle
 
-from src.prompt import prompt
+from src import prompt
 
 if __name__ == '__main__':
-    data = prompt()
+    data = prompt.ask()
     # Serialize the data
     serialized = b64encode(pickle.dumps(data, 2)).decode()
     print(serialized)

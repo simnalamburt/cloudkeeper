@@ -14,7 +14,7 @@ import getpass
 if sys.version_info < (3,):
     input = raw_input
 
-def prompt():
+def ask():
     print('Logging in to the IRCCloud server\n', file=sys.stderr)
 
     # Get email address
