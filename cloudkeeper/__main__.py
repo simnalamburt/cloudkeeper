@@ -15,6 +15,7 @@ import signal
 import traceback
 import logging
 
+from .config import config
 from .ask import ask
 from .connection import IRCCloud
 
@@ -38,8 +39,8 @@ def main():
     handler = lambda sig, frame: (logging.info('Recieved SIGINT, turning off the process. Goodbye!'), sys.exit(0))
     signal.signal(signal.SIGINT, handler)
 
-    # Ask credentials to the user
-    data = ask()
+    # Retrieve credentials from the config file, or ask it to the user
+    data = config() or ask()
 
     # Try to connect to the server infinitely
     while True:

@@ -3,6 +3,11 @@ cloudkeeper
 Don't let IRCCloud disconnect you from the network. Keep being connected!
 
 ```bash
+cp secret.toml.example secret.toml
+vim secret.toml
+
+# Edit the secret.toml and keep it safe!
+
 pipenv install
 pipenv run python -m cloudkeeper
 ```
