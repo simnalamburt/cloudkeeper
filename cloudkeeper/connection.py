@@ -67,6 +67,7 @@ class IRCCloud(object):
             yield json.loads(msg)
 
     def parseline(self, line):
+        # TODO: 정리
         def oob_include(l):
             h = {'Cookie': 'session=%s' % self.session, 'Accept-Encoding': 'gzip'}
             requests.get(self.origin + l['url'], headers=h).json()
@@ -87,6 +88,7 @@ class IRCCloud(object):
             time.sleep(5)
             diff = self.diff(self.current_time())
             if diff > self.timeout and self.last != 0:
+                # TODO: Is it connection timeout? Why this happens?
                 on_disconnect()
                 if hasattr(self, 'ws'):
                     self.ws.close()
