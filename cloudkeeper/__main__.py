@@ -40,7 +40,13 @@ def main():
     signal.signal(signal.SIGINT, handler)
 
     # Retrieve credentials from the config file, or ask it to the user
-    data = config() or ask()
+    data = config()
+    if data is None:
+        if sys.stdin.isatty():
+            data = ask()
+        else:
+            logging.error('No config file detected')
+            sys.exit(1)
 
     # Try to connect to the server infinitely
     while True:
