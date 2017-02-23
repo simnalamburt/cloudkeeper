@@ -21,7 +21,7 @@ if sys.version_info >= (3,):
 else:
     import cPickle as pickle
 
-from . import prompt
+from .ask import ask
 from .connection import IRCCloud
 
 
@@ -50,7 +50,7 @@ def main():
         sys.exit(1)
     elif len(sys.argv) < 2:
         # No credentials supplied
-        data = prompt.ask()
+        data = ask()
     else:
         # Credentials have been supplied as a argument
         serialized = sys.argv[1]
