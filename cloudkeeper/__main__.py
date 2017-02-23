@@ -11,6 +11,7 @@
 from __future__ import print_function, unicode_literals, absolute_import
 import sys
 import time
+import signal
 import traceback
 import binascii
 from base64 import b64decode
@@ -34,6 +35,11 @@ def main():
     Main logic. Asks credentials to the user and tries to connect to the
     IRCCloud server infinitely.
     '''
+
+    # Consider SIGINT as a goodbye signal
+    handler = lambda sig, frame: (print('\n\nGoodbye!'), sys.exit(0))
+    signal.signal(signal.SIGINT, handler)
+
     # Ask credentials to the user
     if len(sys.argv) > 2:
         print('Too many arguments have been supplied')
@@ -57,9 +63,8 @@ def main():
         connection.auth(*data)
         try:
             connection.connect()
-        except KeyboardInterrupt:
-            print('\nGoodbye')
-            sys.exit()
+        except SystemExit:
+            raise
         except:
             print('\x1b[33m')
             print(traceback.format_exc())
