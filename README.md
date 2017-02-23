@@ -7,7 +7,7 @@ pipenv install --three
 pipenv run python -m cloudkeeper
 ```
 
-Type the ID and password. It'll be stored at `secret.ini`.
+Type the ID and password.
 
 <br>
 
