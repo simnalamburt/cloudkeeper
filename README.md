@@ -28,23 +28,32 @@ python -m cloudkeeper
 
 <br>
 
-Deploy using Docker
+Deploy using containers
 --------
+Make a config file first.
 ```bash
-# Make configuration
 sudo mkdir -p /srv/cloudkeeper/
 sudo tee /srv/cloudkeeper/secret.toml > /dev/null <<'EOF'
 email = "my.email@example.com"
 password = "Type your password in here"
 EOF
+```
 
-# Run docker
+Running with [rkt]:
+```
+sudo systemd-run --slice=machine --unit=cloudkeeper \
+    rkt run --dns=host \
+    --volume volume-etc-cloudkeeper,kind=host,source=/srv/cloudkeeper,readOnly=true \
+    quay.io/simnalamburt/cloudkeeper
+```
+
+Running with docker:
+```bash
 sudo docker run --detach \
     --name cloudkeeper \
     --restart always \
-    --volume /srv/cloudkeeper:/etc/cloudkeeper:Z \
+    --volume /srv/cloudkeeper:/etc/cloudkeeper:ro \
     simnalamburt/cloudkeeper
-    gitlab/gitlab-ce:latest
 ```
 
 <br>
@@ -55,6 +64,7 @@ license] and the [Apache License (Version 2.0)]. See [COPYRIGHT] for details.
 
 [Tachikoma doing some IRC]: tachikoma.jpg
 [Tachikoma]: https://en.wikipedia.org/wiki/Tachikoma
+[rkt]: https://coreos.com/rkt
 [MIT license]: LICENSE-MIT
 [Apache License (Version 2.0)]: LICENSE-APACHE
 [COPYRIGHT]: COPYRIGHT
