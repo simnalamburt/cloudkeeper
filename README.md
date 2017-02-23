@@ -24,7 +24,7 @@ python -m cloudkeeper
 
 ![Tachikoma doing some IRC]
 
-> *[Tachikoma] doing some IRC*
+> *[Tachikoma] doing some IRC (?)*
 
 <br>
 
