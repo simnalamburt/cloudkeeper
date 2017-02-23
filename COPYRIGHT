@@ -1,5 +1,5 @@
 Short version for non-laywers:
-  The rccloud-connector project is dual-licensed under Apache 2.0 and MIT terms.
+  The cloudkeeper project is dual-licensed under Apache 2.0 and MIT terms.
 
 Longer version:
   Copyright 2017 Hyeon Kim
@@ -11,7 +11,7 @@ Longer version:
   except according to those terms.
 
 
-The irccloud-connector project includes packages written by third parties. The
+The cloudkeeper project includes packages written by third parties. The
 following third party packages are included, and carry their own copyright
 notices and license terms:
 

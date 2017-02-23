@@ -1,10 +1,10 @@
-irccloud-connector
+cloudkeeper
 ===============
-Keep your IRCCloud connection!
+Don't let IRCCloud disconnect you from the net!
 
 ```bash
 pipenv install --three
-pipenv run python src/main.py
+pipenv run python cloudkeeper/main.py
 ```
 
 Type the ID and password. It'll be stored at `secret.ini`.
@@ -12,7 +12,7 @@ Type the ID and password. It'll be stored at `secret.ini`.
 <br>
 
 --------
-*irccloud-connector* is primarily distributed under the terms of both the [MIT
+*cloudkeeper* is primarily distributed under the terms of both the [MIT
 license] and the [Apache License (Version 2.0)]. See [COPYRIGHT] for details.
 
 [MIT license]: LICENSE-MIT

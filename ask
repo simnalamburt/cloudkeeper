@@ -16,7 +16,7 @@ if sys.version_info >= (3,):
 else:
     import cPickle as pickle
 
-from src import prompt
+from cloudkeeper import prompt
 
 if __name__ == '__main__':
     data = prompt.ask()
