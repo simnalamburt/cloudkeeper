@@ -4,7 +4,7 @@ Don't let IRCCloud disconnect you from the net!
 
 ```bash
 pipenv install --three
-pipenv run python cloudkeeper/main.py
+pipenv run python -m cloudkeeper
 ```
 
 Type the ID and password. It'll be stored at `secret.ini`.

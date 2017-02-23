@@ -28,9 +28,6 @@ import requests
 from websocket import create_connection
 
 
-DELAY = 30
-
-
 class IRCCloud(object):
     def __init__(self):
         self.session = ''
@@ -137,8 +134,8 @@ class IRCCloud(object):
         except KeyError:
             pass
 
-    def diff(self, time):
-        return int(int(time) - int(self.last))
+    def diff(self, current_time):
+        return int(int(current_time) - int(self.last))
 
     def current_time(self):
         return int(time.time())
@@ -152,21 +149,3 @@ class IRCCloud(object):
                 if hasattr(self, 'ws'):
                     self.ws.close()
                 return
-
-
-if __name__ == '__main__':
-    try:
-        while True:
-            try:
-                feed = IRCCloud()
-                feed.auth()
-                feed.connect()
-            except KeyboardInterrupt:
-                sys.exit()
-            except:
-                print(traceback.format_exc())
-                print('Disconnected. Reconnecting in {} seconds.\n'.format(DELAY))
-                time.sleep(DELAY)
-                continue
-    except KeyboardInterrupt:
-        sys.exit()
