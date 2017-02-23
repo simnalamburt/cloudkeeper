@@ -23,4 +23,7 @@ RUN pip install --no-cache-dir -r Pipfile.lock.txt
 # Copy source codes
 COPY . /usr/src/app
 
+# Define a mount point
+VOLUME ["/etc/cloudkeeper"]
+
 ENTRYPOINT ["python", "-m", "cloudkeeper"]
