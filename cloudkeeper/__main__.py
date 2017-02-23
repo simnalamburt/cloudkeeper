@@ -13,13 +13,7 @@ import sys
 import time
 import signal
 import traceback
-import binascii
 import logging
-from base64 import b64decode
-if sys.version_info >= (3,):
-    import pickle
-else:
-    import cPickle as pickle
 
 from .ask import ask
 from .connection import IRCCloud
@@ -45,21 +39,7 @@ def main():
     signal.signal(signal.SIGINT, handler)
 
     # Ask credentials to the user
-    if len(sys.argv) > 2:
-        logging.error('Too many arguments have been supplied.')
-        sys.exit(1)
-    elif len(sys.argv) < 2:
-        # No credentials supplied
-        data = ask()
-    else:
-        # Credentials have been supplied as a argument
-        serialized = sys.argv[1]
-        try:
-            pickled = b64decode(serialized)
-            data = pickle.loads(pickled)
-        except (EOFError, ValueError, KeyError, binascii.Error, pickle.UnpicklingError) as e:
-            logging.error('Wrong arguments have been supplied. ({})'.format(e))
-            sys.exit(1)
+    data = ask()
 
     # Try to connect to the server infinitely
     while True:

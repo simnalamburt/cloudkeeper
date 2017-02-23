@@ -10,13 +10,8 @@
 
 from __future__ import print_function, unicode_literals
 import sys
-import signal
 import getpass
-from base64 import b64encode
-if sys.version_info >= (3,):
-    import pickle
-else:
-    import cPickle as pickle
+if sys.version_info < (3,):
     input = raw_input
 
 
@@ -38,17 +33,3 @@ def ask():
 
     print(file=sys.stderr)
     return (email, password)
-
-
-if __name__ == '__main__':
-    # Consider SIGINT as a goodbye signal
-    handler = lambda sig, frame: (print('\n\nGoodbye!', file=sys.stderr), sys.exit(0))
-    signal.signal(signal.SIGINT, handler)
-
-    # Ask the credentials
-    data = ask()
-
-    # Serialize the data
-    serialized = b64encode(pickle.dumps(data, 2)).decode()
-    print(serialized)
-    print('\x1b[34mPassing the data to the original process\x1b[0m', file=sys.stderr)
