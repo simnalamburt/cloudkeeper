@@ -7,6 +7,9 @@ pipenv install --three
 pipenv run python -m cloudkeeper
 ```
 
+#### Prerequisites
+- Python 2.6+ or 3.3+
+
 ![Tachikoma doing some IRC]
 
 > *[Tachikoma] doing some IRC*
