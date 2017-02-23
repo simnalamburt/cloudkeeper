@@ -28,6 +28,27 @@ python -m cloudkeeper
 
 <br>
 
+Deploy using Docker
+--------
+```bash
+# Make configuration
+sudo mkdir -p /srv/cloudkeeper/
+sudo tee /srv/cloudkeeper/secret.toml > /dev/null <<'EOF'
+email = "my.email@example.com"
+password = "Type your password in here"
+EOF
+
+# Run docker
+sudo docker run --detach \
+    --name cloudkeeper \
+    --restart always \
+    --volume /srv/cloudkeeper:/etc/cloudkeeper:Z \
+    simnalamburt/cloudkeeper
+    gitlab/gitlab-ce:latest
+```
+
+<br>
+
 --------
 *cloudkeeper* is primarily distributed under the terms of both the [MIT
 license] and the [Apache License (Version 2.0)]. See [COPYRIGHT] for details.
