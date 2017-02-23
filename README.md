@@ -3,8 +3,15 @@ cloudkeeper
 Don't let IRCCloud disconnect you from the network. Keep being connected!
 
 ```bash
-pipenv install --three
+pipenv install
 pipenv run python -m cloudkeeper
+```
+
+#### How to use it without pipenv
+```bash
+# Setup virtualenv beforehand
+pip install -r Pipfile.lock.txt
+python -m cloudkeeper
 ```
 
 #### Prerequisites
