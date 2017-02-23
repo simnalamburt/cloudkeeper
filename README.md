@@ -1,6 +1,6 @@
 cloudkeeper
 ===============
-Keep being connected. Don't let IRCCloud disconnect you from the network.
+Don't let IRCCloud disconnect you from the network. Keep being connected!
 
 ```bash
 pipenv install --three
