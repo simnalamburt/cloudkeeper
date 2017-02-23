@@ -27,4 +27,5 @@ def ask():
     sys.stderr.flush()
     password = getpass.getpass('')
 
+    print(file=sys.stderr)
     return (email, password)

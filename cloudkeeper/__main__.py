@@ -61,7 +61,7 @@ def main():
     while True:
         connection = IRCCloud()
 
-        print('\nAuthenticating ... ', end='')
+        print('Authenticating ... ', end='')
         sys.stdout.flush()
         result = connection.auth(*data)
         if result is None:

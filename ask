@@ -9,6 +9,7 @@
 # option. This file may not be copied, modified, or distributed
 # except according to those terms.
 
+from __future__ import print_function, unicode_literals, absolute_import
 import sys
 from base64 import b64encode
 if sys.version_info >= (3,):
@@ -23,3 +24,4 @@ if __name__ == '__main__':
     # Serialize the data
     serialized = b64encode(pickle.dumps(data, 2)).decode()
     print(serialized)
+    print('\x1b[34mPassing the data to the original process\x1b[0m', file=sys.stderr)
