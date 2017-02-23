@@ -52,7 +52,7 @@ class IRCCloud(object):
             resp = requests.post(self.uri, data=data, headers=headers)
             data = json.loads(resp.text)
             if 'session' not in data:
-                print('[error] Wrong email/password combination. Exiting.')
+                print('\x1b[31mError:\x1b[0m Wrong email/password combination. Exiting.')
                 sys.exit()
             self.session = data['session']
             print('Done')
@@ -90,7 +90,7 @@ class IRCCloud(object):
             time.sleep(5)
             diff = self.diff(self.current_time())
             if diff > self.timeout and self.last != 0:
-                print('[error] Connection timed out...')
+                print('\x1b[31mError:\x1b[0m Connection timed out...')
                 if hasattr(self, 'ws'):
                     self.ws.close()
                 return
