@@ -1,13 +1,15 @@
 cloudkeeper
 ===============
-Don't let IRCCloud disconnect you from the net!
+Keep being connected. Don't let IRCCloud disconnect you from the network.
 
 ```bash
 pipenv install --three
 pipenv run python -m cloudkeeper
 ```
 
-Type the ID and password.
+![Tachikoma doing some IRC]
+
+> *[Tachikoma] doing some IRC*
 
 <br>
 
@@ -15,6 +17,8 @@ Type the ID and password.
 *cloudkeeper* is primarily distributed under the terms of both the [MIT
 license] and the [Apache License (Version 2.0)]. See [COPYRIGHT] for details.
 
+[Tachikoma doing some IRC]: tachikoma.jpg
+[Tachikoma]: https://en.wikipedia.org/wiki/Tachikoma
 [MIT license]: LICENSE-MIT
 [Apache License (Version 2.0)]: LICENSE-APACHE
 [COPYRIGHT]: COPYRIGHT
