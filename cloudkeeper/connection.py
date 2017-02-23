@@ -8,7 +8,7 @@
 # option. This file may not be copied, modified, or distributed
 # except according to those terms.
 
-from __future__ import print_function, unicode_literals
+from __future__ import unicode_literals
 import json
 import sys
 import time
@@ -33,37 +33,33 @@ class IRCCloud(object):
         self.last = 0
         self.timeout = 120
 
-    def connect(self):
-        for line in self.create(self.session):
+    def connect(self, on_succeeded, on_disconnect):
+        enumerator = self.create(self.session)
+        on_succeeded()
+
+        for line in enumerator:
             if self.last == 0:
                 # Just started..
-                thread.start_new_thread(self.check, ())
+                thread.start_new_thread(self.check, (on_disconnect,))
             self.last = self.current_time()
             self.parseline(line)
 
     def auth(self, user_email, user_password):
-        try:
-            # New form-auth API needs token to prevent CSRF attacks
-            print('Authenticating ... ', end='')
-            sys.stdout.flush()
-            token = requests.post(self.uri_formauth, headers={'content-length': '0'}).json()['token']
-            data = {'email': user_email, 'password': user_password, 'token': token}
-            headers = {'x-auth-formtoken': token}
-            resp = requests.post(self.uri, data=data, headers=headers)
-            data = json.loads(resp.text)
-            if 'session' not in data:
-                print('\x1b[31mError:\x1b[0m Wrong email/password combination. Exiting.')
-                sys.exit()
-            self.session = data['session']
-            print('Done')
-        except requests.exceptions.ConnectionError:
-            print('Failed!')
-            raise Exception('Failed to connect')
+        # Retrieve a CSRF token
+        token = requests.post(self.uri_formauth, headers={'content-length': '0'}).json()['token']
+
+        # Retrieve a session key
+        data = {'email': user_email, 'password': user_password, 'token': token}
+        headers = {'x-auth-formtoken': token}
+        resp = requests.post(self.uri, data=data, headers=headers)
+
+        session = json.loads(resp.text).get('session')
+        self.session = session
+        return session
 
     def create(self, session):
         h = ['Cookie: session=%s' % session]
         self.ws = create_connection(self.wss, header=h, origin=self.origin)
-        print('Connection created.')
         while True:
             msg = self.ws.recv()
             if msg:
@@ -85,12 +81,12 @@ class IRCCloud(object):
     def current_time(self):
         return int(time.time())
 
-    def check(self):
+    def check(self, on_disconnect):
         while True:
             time.sleep(5)
             diff = self.diff(self.current_time())
             if diff > self.timeout and self.last != 0:
-                print('\x1b[31mError:\x1b[0m Connection timed out...')
+                on_disconnect()
                 if hasattr(self, 'ws'):
                     self.ws.close()
                     # TODO: Shall we raise an Exception in here?

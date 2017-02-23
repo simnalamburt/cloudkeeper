@@ -60,13 +60,23 @@ def main():
     # Try to connect to the server infinitely
     while True:
         connection = IRCCloud()
-        connection.auth(*data)
+
+        print('\nAuthenticating ... ', end='')
+        sys.stdout.flush()
+        result = connection.auth(*data)
+        if result is None:
+            print('\x1b[31mFailed:\x1b[0m Wrong email/password combination.')
+            sys.exit(1)
+        print('Done')
+
         try:
-            connection.connect()
+            connection.connect(
+                lambda: print('Connection created.'),
+                lambda: print('\x1b[31mError:\x1b[0m Connection time out'))
         except SystemExit:
             raise
         except:
-            print('\x1b[33m')
+            print('\x1b[31mFailed!\x1b[33m\n')
             print(traceback.format_exc())
             print('\x1b[0mDisconnected. Reconnecting in {} seconds.\n'.format(DELAY))
             time.sleep(DELAY)
