@@ -23,13 +23,18 @@ import requests
 from websocket import create_connection
 
 
+#
+# Constants
+#
+URL_LOGIN = 'https://www.irccloud.com/chat/login'
+URL_FORMAUTH = 'https://www.irccloud.com/chat/auth-formtoken'
+URL_ORIGIN = 'https://www.irccloud.com'
+URL_WEBSOCKET = 'wss://api.irccloud.com/websocket/' + random.choice(string.digits)
+
+
 class IRCCloud(object):
     def __init__(self):
         self.session = ''
-        self.uri = 'https://www.irccloud.com/chat/login'
-        self.uri_formauth = 'https://www.irccloud.com/chat/auth-formtoken'
-        self.origin = 'https://www.irccloud.com'
-        self.wss = 'wss://api.irccloud.com/websocket/' + random.choice(string.digits)
         self.last = 0
         self.timeout = 120
 
@@ -46,12 +51,12 @@ class IRCCloud(object):
 
     def auth(self, user_email, user_password):
         # Retrieve a CSRF token
-        token = requests.post(self.uri_formauth, headers={'content-length': '0'}).json()['token']
+        token = requests.post(URL_FORMAUTH, headers={'content-length': '0'}).json()['token']
 
         # Retrieve a session key
         data = {'email': user_email, 'password': user_password, 'token': token}
         headers = {'x-auth-formtoken': token}
-        resp = requests.post(self.uri, data=data, headers=headers)
+        resp = requests.post(URL_LOGIN, data=data, headers=headers)
 
         session = json.loads(resp.text).get('session')
         self.session = session
@@ -59,7 +64,7 @@ class IRCCloud(object):
 
     def create(self, session):
         h = ['Cookie: session=%s' % session]
-        self.ws = create_connection(self.wss, header=h, origin=self.origin)
+        self.ws = create_connection(URL_WEBSOCKET, header=h, origin=URL_ORIGIN)
         while True:
             msg = self.ws.recv()
             if not msg:
@@ -70,7 +75,7 @@ class IRCCloud(object):
         # TODO: 정리
         def oob_include(l):
             h = {'Cookie': 'session=%s' % self.session, 'Accept-Encoding': 'gzip'}
-            requests.get(self.origin + l['url'], headers=h).json()
+            requests.get(URL_ORIGIN + l['url'], headers=h).json()
 
         try:
             locals()[line['type']](line)
