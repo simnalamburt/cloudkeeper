@@ -72,7 +72,7 @@ def main():
         try:
             connection.connect(
                 lambda: print('Connection created.'),
-                lambda: print('\x1b[31mError:\x1b[0m Connection time out'))
+                lambda: print('\x1b[33mWarning:\x1b[0m Disconnected from the network'))
         except SystemExit:
             raise
         except:

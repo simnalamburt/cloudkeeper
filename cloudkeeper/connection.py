@@ -36,13 +36,13 @@ class IRCCloud(object):
     def connect(self, on_succeeded, on_disconnect):
         enumerator = self.create(self.session)
         on_succeeded()
-
         for line in enumerator:
             if self.last == 0:
                 # Just started..
                 thread.start_new_thread(self.check, (on_disconnect,))
             self.last = self.current_time()
             self.parseline(line)
+        on_disconnect()
 
     def auth(self, user_email, user_password):
         # Retrieve a CSRF token
@@ -62,8 +62,9 @@ class IRCCloud(object):
         self.ws = create_connection(self.wss, header=h, origin=self.origin)
         while True:
             msg = self.ws.recv()
-            if msg:
-                yield json.loads(msg)
+            if not msg:
+                break
+            yield json.loads(msg)
 
     def parseline(self, line):
         def oob_include(l):
