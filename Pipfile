@@ -5,3 +5,4 @@ verify_ssl = true
 [packages]
 websocket-client = "~=0.40.0"
 requests = ">=2.13.0,<3"
+toml = "~=0.9.2"
