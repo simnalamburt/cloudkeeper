@@ -93,4 +93,5 @@ class IRCCloud(object):
                 print('\x1b[31mError:\x1b[0m Connection timed out...')
                 if hasattr(self, 'ws'):
                     self.ws.close()
+                    # TODO: Shall we raise an Exception in here?
                 return
