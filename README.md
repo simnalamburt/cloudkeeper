@@ -44,7 +44,8 @@ Running with [rkt]:
 sudo systemd-run --slice=machine --unit=cloudkeeper \
     rkt run --dns=host \
     --volume volume-etc-cloudkeeper,kind=host,source=/srv/cloudkeeper,readOnly=true \
-    quay.io/simnalamburt/cloudkeeper
+    --insecure-options=image \
+    docker://quay.io/simnalamburt/cloudkeeper
 ```
 
 Running with docker:
