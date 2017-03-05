@@ -30,7 +30,7 @@ python -m cloudkeeper
 
 Deploy using containers
 --------
-Make a config file first.
+Please make a config file first.
 ```bash
 sudo mkdir -p /srv/cloudkeeper/
 sudo tee /srv/cloudkeeper/secret.toml > /dev/null <<'EOF'
@@ -39,18 +39,18 @@ password = "Type your password in here"
 EOF
 ```
 
-Running with [rkt]:
-```
-sudo systemd-run --slice=machine --unit=cloudkeeper \
-    rkt run --dns=host \
+#### A. Using [rkt]
+See [`contrib/`](contrib/) directory for systemd interop.
+```bash
+rkt run --dns=host \
     --volume volume-etc-cloudkeeper,kind=host,source=/srv/cloudkeeper,readOnly=true \
     --insecure-options=image \
     docker://quay.io/simnalamburt/cloudkeeper
 ```
 
-Running with docker:
+#### B. Using [docker]
 ```bash
-sudo docker run --detach \
+docker run --detach \
     --name cloudkeeper \
     --restart always \
     --volume /srv/cloudkeeper:/etc/cloudkeeper:ro \
@@ -66,6 +66,7 @@ license] and the [Apache License (Version 2.0)]. See [COPYRIGHT] for details.
 [Tachikoma doing some IRC]: tachikoma.jpg
 [Tachikoma]: https://en.wikipedia.org/wiki/Tachikoma
 [rkt]: https://coreos.com/rkt
+[docker]: https://docker.com/
 [MIT license]: LICENSE-MIT
 [Apache License (Version 2.0)]: LICENSE-APACHE
 [COPYRIGHT]: COPYRIGHT

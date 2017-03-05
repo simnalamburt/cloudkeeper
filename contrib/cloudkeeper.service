@@ -1,0 +1,31 @@
+# Copyright 2015-2017 Hyeon Kim
+#
+# Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+# http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+# <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+# option. This file may not be copied, modified, or distributed
+# except according to those terms.
+
+[Unit]
+# Metadata
+Description=A daemon which prevents users from being disconnected from IRCCloud server
+Documentation=https://github.com/simnalamburt/cloudkeeper
+# Wait for networking
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Slice=machine.slice
+# Fetch the app
+ExecStartPre=/usr/bin/rkt fetch --insecure-options=image \
+             docker://quay.io/simnalamburt/cloudkeeper
+# Start the app
+ExecStart=/usr/bin/rkt run --dns=host \
+          --volume volume-etc-cloudkeeper,kind=host,source=/srv/cloudkeeper,readOnly=true \
+          quay.io/simnalamburt/cloudkeeper
+ExecStopPost=/usr/bin/rkt gc --mark-only
+KillMode=mixed
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
