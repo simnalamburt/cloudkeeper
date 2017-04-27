@@ -5,6 +5,7 @@ Don't let IRCCloud disconnect you from the network. Keep being connected!
 ```bash
 cp secret.toml.example secret.toml
 vim secret.toml
+chmod 400 secret.toml
 
 # Edit the secret.toml and keep it safe!
 
@@ -37,6 +38,7 @@ sudo tee /srv/cloudkeeper/secret.toml > /dev/null <<'EOF'
 email = "my.email@example.com"
 password = "Type your password in here"
 EOF
+sudo chmod 400 /srv/cloudkeeper/secret.toml
 ```
 
 #### A. Using [rkt]
