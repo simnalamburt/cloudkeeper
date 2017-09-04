@@ -60,13 +60,6 @@ chmod 400 secret.toml
 
 #### 2. Deploy it.
 ```bash
-pipenv install
-pipenv run python -m cloudkeeper
-```
-
-... or if you don't want [pipenv] ...
-
-```bash
 # Setup virtualenv beforehand
 pip install -r Pipfile.lock.txt
 python -m cloudkeeper
@@ -81,7 +74,6 @@ license] and the [Apache License (Version 2.0)]. See [COPYRIGHT] for details.
 [Tachikoma doing some IRC]: tachikoma.jpg
 [Tachikoma]: https://en.wikipedia.org/wiki/Tachikoma
 [docker]: https://docker.com/
-[pipenv]: https://github.com/kennethreitz/pipenv
 [MIT license]: LICENSE-MIT
 [Apache License (Version 2.0)]: LICENSE-APACHE
 [COPYRIGHT]: COPYRIGHT
