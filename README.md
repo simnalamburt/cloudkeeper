@@ -61,7 +61,7 @@ chmod 400 secret.toml
 #### 2. Deploy it.
 ```bash
 # Setup virtualenv beforehand
-pip install -r Pipfile.lock.txt
+pip install -r requirements.txt
 python -m cloudkeeper
 ```
 

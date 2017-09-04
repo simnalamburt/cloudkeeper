@@ -17,8 +17,8 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Install dependencies
-COPY Pipfile.lock.txt /usr/src/app/
-RUN pip install --no-cache-dir -r Pipfile.lock.txt
+COPY requirements.txt /usr/src/app/
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy source codes
 COPY . /usr/src/app
