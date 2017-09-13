@@ -30,13 +30,6 @@ docker run --detach \
     --restart always \
     --volume /srv/cloudkeeper:/etc/cloudkeeper:ro \
     simnalamburt/cloudkeeper
-
-# Alternative source
-docker run --detach \
-    --name cloudkeeper \
-    --restart always \
-    --volume /srv/cloudkeeper:/etc/cloudkeeper:ro \
-    quay.io/simnalamburt/cloudkeeper
 ```
 
 The container image of ircbot project is uploaded to both [Quay] and [Docker Hub].
