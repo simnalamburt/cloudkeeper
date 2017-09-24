@@ -30,11 +30,6 @@ docker run -d --restart=always \
     simnalamburt/cloudkeeper
 ```
 
-The container image of ircbot project is uploaded to both [Quay] and [Docker Hub].
-
-[Quay]: https://quay.io/repository/simnalamburt/cloudkeeper
-[Docker Hub]: https://hub.docker.com/r/simnalamburt/cloudkeeper/
-
 <br>
 
 ### B. Without container
