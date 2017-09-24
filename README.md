@@ -25,9 +25,7 @@ sudo chmod 400 /srv/cloudkeeper/secret.toml
 
 #### 2. Deploy it.
 ```bash
-docker run --detach \
-    --name cloudkeeper \
-    --restart always \
+docker run -d --restart=always \
     --volume /srv/cloudkeeper:/etc/cloudkeeper:ro \
     simnalamburt/cloudkeeper
 ```
