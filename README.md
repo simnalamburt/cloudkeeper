@@ -6,7 +6,7 @@ Don't let IRCCloud disconnect you from the network. Keep being connected!
 
 > *[Tachikoma] doing some IRC (?)*
 
-<br>
+&nbsp;
 
 How to run
 --------
@@ -30,7 +30,7 @@ docker run -d --restart=always \
     simnalamburt/cloudkeeper
 ```
 
-<br>
+&nbsp;
 
 ### B. Without container
 Requires Python 2.6+ or 3.3+.
@@ -51,7 +51,7 @@ pip install -r requirements.txt
 python -m cloudkeeper
 ```
 
-<br>
+&nbsp;
 
 --------
 *cloudkeeper* is primarily distributed under the terms of both the [MIT
