@@ -1,2 +1,5 @@
 # virtualenv
 /.venv/
+
+# git
+/.git/

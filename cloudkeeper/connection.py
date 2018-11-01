@@ -1,14 +1,5 @@
 # coding: utf-8
-
-# Copyright 2017 Hyeon Kim
-#
-# Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
-# http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
-# <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
-# option. This file may not be copied, modified, or distributed
-# except according to those terms.
-
-from __future__ import unicode_literals
+from __future__ import unicode_literals, absolute_import
 import json
 import sys
 import time
@@ -51,14 +42,15 @@ class IRCCloud(object):
 
     def auth(self, user_email, user_password):
         # Retrieve a CSRF token
-        token = requests.post(URL_FORMAUTH, headers={'content-length': '0'}).json()['token']
+        resp = requests.post(URL_FORMAUTH, headers={'content-length': '0'})
+        token = resp.json()['token']
 
         # Retrieve a session key
         data = {'email': user_email, 'password': user_password, 'token': token}
         headers = {'x-auth-formtoken': token}
         resp = requests.post(URL_LOGIN, data=data, headers=headers)
-
         session = json.loads(resp.text).get('session')
+
         self.session = session
         return session
 
@@ -74,7 +66,7 @@ class IRCCloud(object):
     def parseline(self, line):
         # TODO: 정리
         def oob_include(l):
-            h = {'Cookie': 'session=%s' % self.session, 'Accept-Encoding': 'gzip'}
+            h = {'Cookie': 'session={}'.format(self.session), 'Accept-Encoding': 'gzip'}
             requests.get(URL_ORIGIN + l['url'], headers=h).json()
 
         try:
