@@ -24,9 +24,9 @@ docker run -d --restart=always \
 Requires Python 2.6+ or 3.3+.
 
 ```bash
-# Setup virtualenv if you want
+# Setup virtualenv first
 
-pip install -r requirements.txt
+pip install --editable .
 
 export CLOUDKEEPER_EMAIL=user@example.com
 export CLOUDKEEPER_PASSWORD=yoursecretpassword

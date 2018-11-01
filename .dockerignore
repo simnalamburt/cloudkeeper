@@ -1,5 +1,8 @@
-# virtualenv
+# python
 /.venv/
+/cloudkeeper.egg-info/
+/build/
+/dist/
 
 # git
 /.git/
