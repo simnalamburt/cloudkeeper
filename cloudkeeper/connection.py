@@ -62,7 +62,7 @@ def connect(session, timeout=120.0, on_succeeded=None, on_disconnect=None):
     if on_succeeded is not None:
         on_succeeded()
 
-    thread = Thread(target=check, args=(context, timeout))
+    thread = Thread(target=check, args=(context, timeout), daemon=True)
     thread.start()
 
     while True:
