@@ -22,7 +22,6 @@ docker run -d --restart=always \
 
 ### B. Without [docker]
 Requires Python 2.6+ or 3.3+.
-
 ```bash
 # Setup virtualenv first
 
@@ -34,11 +33,17 @@ python -m cloudkeeper
 ```
 
 Testing
-
 ```bash
 pip install flake8
 flake8
 ```
+
+Packaging
+```bash
+pip install wheel
+python setup.py sdist bdist_wheel
+```
+
 
 &nbsp;
 
