@@ -1,4 +1,4 @@
-cloudkeeper
+cloudkeeper [![Docker Badge]][Docker Hub]
 ===============
 Don't let IRCCloud disconnect you from the network. Keep being connected!
 
@@ -51,6 +51,8 @@ python setup.py sdist bdist_wheel
 *cloudkeeper* is primarily distributed under the terms of both the [MIT
 license] and the [Apache License (Version 2.0)]. See [COPYRIGHT] for details.
 
+[Docker Badge]: https://badgen.net/docker/pulls/simnalamburt/cloudkeeper?icon=docker&label=pulls
+[Docker Hub]: https://hub.docker.com/r/simnalamburt/cloudkeeper/
 [Tachikoma doing some IRC]: tachikoma.jpg
 [Tachikoma]: https://en.wikipedia.org/wiki/Tachikoma
 [docker]: https://docker.com/
