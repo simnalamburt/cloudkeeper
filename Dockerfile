@@ -1,12 +1,13 @@
+# Build
 FROM python:3-alpine
-MAINTAINER Hyeon Kim <simnalamburt@gmail.com>
-
-# Update system
-RUN apk upgrade --no-cache
-
-# Prepare app environment
 WORKDIR /a
-COPY . .
-RUN pip install .
+COPY setup.py .
+COPY cloudkeeper cloudkeeper
+RUN python setup.py bdist_wheel
 
-ENTRYPOINT ["python", "-m", "cloudkeeper"]
+# Run
+FROM python:3-alpine
+WORKDIR /a
+COPY --from=0 /a/dist/*.whl .
+RUN pip install cloudkeeper-*.whl
+CMD ["python", "-m", "cloudkeeper"]
