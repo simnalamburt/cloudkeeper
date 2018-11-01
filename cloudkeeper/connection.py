@@ -28,7 +28,7 @@ def auth(email, password):
     resp = requests.post(URL_FORMAUTH, headers={'content-length': '0'})
     msg = resp.json()
     if msg.get('success') is not True or 'token' not in msg:
-        return None
+        return None, None
     token = msg['token']
 
     # Retrieve a session key
@@ -37,7 +37,7 @@ def auth(email, password):
     resp = requests.post(URL_LOGIN, data=data, headers=headers)
     msg = resp.json()
     if msg.get('success') is not True or 'session' not in msg:
-        return None
+        return None, None
     session = msg['session']
 
     logger.info('Authentication completed: {}'.format(session))
