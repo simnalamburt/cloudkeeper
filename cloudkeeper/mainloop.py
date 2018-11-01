@@ -7,7 +7,12 @@ import signal
 import traceback
 import logging
 
-from .connection import IRCCloud
+from .connection import auth, connect
+
+
+def sigint_handler(sig, frame):
+    logging.info('Recieved SIGINT, turning off the process. Goodbye!')
+    sys.exit(0)
 
 
 def mainloop(delay=30):
@@ -21,8 +26,7 @@ def mainloop(delay=30):
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     # Consider SIGINT as a goodbye signal
-    handler = lambda sig, frame: (logging.info('Recieved SIGINT, turning off the process. Goodbye!'), sys.exit(0))
-    signal.signal(signal.SIGINT, handler)
+    signal.signal(signal.SIGINT, sigint_handler)
 
     # Retrieve credentials from the config file, or ask it to the user
     email = os.environ.get('CLOUDKEEPER_EMAIL')
@@ -36,24 +40,24 @@ def mainloop(delay=30):
 
     # Try to connect to the server infinitely
     while True:
-        connection = IRCCloud()
-
-        logging.info('Starting authentication ...')
+        logging.info('Starting authentication')
         sys.stdout.flush()
-        result = connection.auth(email, password)
-        if result is None:
-            logging.error('Authentication failed. Perhaps wrong email/password combination.')
+        session = auth(email, password)
+        if session is None:
+            logging.error('Authentication failed')
             sys.exit(1)
-        logging.info('Authentication completed.')
+        logging.info('Authentication completed')
 
         try:
-            connection.connect(
-                lambda: logging.info('Connection created.'),
-                lambda: logging.warning('Disconnected from the network'))
+            connect(
+                session,
+                on_succeeded=lambda: logging.info('Connection created'),
+                on_disconnect=lambda: logging.warning('Disconnected from the network'),
+            )
         except SystemExit:
             raise
-        except:
+        except Exception:
             logging.error('Unhandled exception occurred:')
             logging.error(traceback.format_exc())
-            logging.error('Disconnected. Reconnecting in {} seconds.'.format(delay))
+            logging.error('Disconnected, reconnecting in {} seconds'.format(delay))
             time.sleep(delay)
