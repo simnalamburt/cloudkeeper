@@ -9,5 +9,5 @@ RUN python setup.py bdist_wheel
 FROM python:3-alpine
 WORKDIR /a
 COPY --from=0 /a/dist/*.whl .
-RUN pip install cloudkeeper-*.whl
+RUN pip install --no-cache-dir cloudkeeper-*.whl
 CMD ["python", "-m", "cloudkeeper"]
