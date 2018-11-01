@@ -33,6 +33,13 @@ export CLOUDKEEPER_PASSWORD=yoursecretpassword
 python -m cloudkeeper
 ```
 
+Testing
+
+```bash
+pip install flake8
+flake8
+```
+
 &nbsp;
 
 --------
