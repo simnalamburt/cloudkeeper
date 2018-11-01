@@ -81,7 +81,8 @@ def connect(session, websocket_url, timeout=120.0, check_period=5.0):
         'last': time.time(),
         'socket': socket,
     }
-    thread = Thread(target=check, args=(context, timeout, check_period), daemon=True)
+    thread = Thread(target=check, args=(context, timeout, check_period))
+    thread.daemon = True
     thread.start()
 
     while True:
